@@ -1,36 +1,39 @@
 from sort_strategy import *
 
 class MergeSort(sort_strategy):
-    def merge(self, left, right):
-        if left is None or right is None:
-            return
-        n = len(left)
-        m = len(right)
+    def merge(self, arr, first, mid, last):
+        left = arr[first:mid+1]
+        right = arr[mid+1:last+1]
         i = j = 0
-        result = []
-        while i < n and j < m:
-            if left[i] < right[j]:
-                result.append(left[i])
+        l = len(left)
+        r = len(right)
+        k = first
+
+        while i < l and j < r:
+            if left[i] <= right[j]:
+                arr[k] = left[i]
                 i += 1
             else:
-                result.append(right[j])
+                arr[k] = right[j]
                 j += 1
-        while i < n:
-            result.append(left[i])
+            k += 1
+
+        while i < l:
+            arr[k] = left[i]
             i += 1
-        while j < m:
-            result.append(right[j])
+            k += 1
+
+        while j < r:
+            arr[k] = right[j]
             j += 1
-        return result
+            k += 1
 
+    def sort(self, arr, first, last):
+        if first < last:
+            mid = (first + last) // 2
+            self.sort(arr, first, mid)
+            self.sort(arr, mid + 1, last)
+            self.merge(arr, first, mid, last)
+        return arr
 
-    def sort(self, arr, left, right):
-        left = 0
-        right = len(arr)
-        if len(arr) <= 1:
-            return arr
-        mid = (left + right) // 2
-        left_half = self.sort(arr[left : mid], left, mid)
-        right_half = self.sort(arr[mid : right], mid, right+1)
-        return self.merge(left_half, right_half)
 
